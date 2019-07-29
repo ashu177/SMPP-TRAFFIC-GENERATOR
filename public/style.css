@@ -1,0 +1,31 @@
+body {
+    margin: 0;
+	background-color: whitesmoke;
+}
+
+.navbar {
+    height: 100px;
+    background-color: #333;
+    color: whitesmoke;
+    margin-bottom: 15px;
+    text-align: center;
+    font-size: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+
+.hideDontTakeUpSpace
+{
+	display:none;
+}
+
+.tableStyle {
+	border: 1px solid black;
+	width: 30%;
+	text-align: left;
+	padding: 15px;
+	border-collapse: collapse;
+}
