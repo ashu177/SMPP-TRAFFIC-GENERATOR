@@ -1,7 +1,7 @@
 import React, { Component } from "react"
 import ReactTable from 'react-table'
 import 'react-table/react-table.css'
-//import '/public/style.css'
+import './../style.css'
 
 class MainConDashboard extends Component {
 	constructor(props) {
@@ -19,6 +19,7 @@ class MainConDashboard extends Component {
 		this.handlePause = this.handlePause.bind(this);
 		this.handleResume = this.handleResume.bind(this);
 		this.makeData = this.makeData.bind(this);
+		this.handleDelete = this.handleDelete.bind(this);
 	}
 
 	makeData() {
@@ -73,12 +74,13 @@ class MainConDashboard extends Component {
 			body: JSON.stringify(object),
 		});
 	}
-	handleDelete(event) {
+
+	handleStop(event) {
 		event.preventDefault();
 		let object = {}
 		object["timeCheck"] = this.state.timeCheck;
 
-		fetch('http://172.19.6.33:5000/pause', {
+		fetch('http://172.19.6.33:5000/stop', {
 			method: 'POST',
 			headers: {
 				Accept: 'application/json',
@@ -89,13 +91,12 @@ class MainConDashboard extends Component {
 		});
 	}
 
-	handleStop(event) {
+	handleDelete(event) {
 		event.preventDefault();
 		let object = {}
 		object["timeCheck"] = this.state.timeCheck;
-		console.log(object["timeCheck"]);
 
-		fetch('http://172.19.6.33:5000/stop', {
+		fetch('http://172.19.6.33:5000/delete', {
 			method: 'POST',
 			headers: {
 				Accept: 'application/json',
@@ -156,19 +157,15 @@ class MainConDashboard extends Component {
 			}
 		];
 
-
-
-		
-
 		return (
 			<div>
-				{this.state.data}
-				<div align="center">
-					<h2>{this.state.timeCheck}</h2>
-					<button type="button" variant="primary" onClick={this.handlePause}>Pause</button>
+				
+				<div align="right">
+					
+					<button type="button" onClick={this.handlePause}>Pause</button>
 					<button type="button" onClick={this.handleResume}>Resume</button>
 					<button type="button" onClick={this.handleStop}>Stop</button>
-					
+					<button type="button" onClick={this.handleDelete}>Delete</button>
 				</div>
 				<br />
 				<ReactTable
@@ -177,7 +174,6 @@ class MainConDashboard extends Component {
 					columns={columns}
 					defaultSorted={[{ id: "timeStamp", desc: false }]}
 				/>
-				
 			</div>
 		);
 	}
