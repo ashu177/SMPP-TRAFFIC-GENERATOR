@@ -40,14 +40,23 @@ class serviceClass:
         q.put(json_data)
     
     def pushDb(self, data):
+        #print("here")
+        res="True"
         database = mysql.connector.connect(host="localhost",user="root",passwd="root",db="smpp")
         mycursor = database.cursor()
         sql = "INSERT INTO smppTrafficMonitor  VALUES (%s, %s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
         val = (data["systemId"].encode('utf-8'),data["password"].encode('utf-8'),data["systemType"].encode('utf-8'),(data["ip"].encode('utf-8')) , int (data["portNumber"].encode('utf-8')),int (data["sourceAddress"].encode('utf-8')),int(data["sourceAddressRange"].encode('utf-8'))
                 ,int(data["destinationAddress"].encode('utf-8')) , int (data["destinationAddressRange"].encode('utf-8'))
                 ,data["shortMessage"].encode('utf-8'), data["msgSend"],data["ackRecv"], data["timeStamp"],"0")
-        mycursor.execute(sql,val)
+        try:
+            mycursor.execute(sql,val)
+        except:
+            res="False"
+        #print("dcs==",res)
         database.commit()
+        #print(type(mycursor.execute(sql,val)),"============")
+        #return True
+        return res
 
         
 
@@ -64,13 +73,17 @@ class serviceClass:
     def getData(self):
         database = mysql.connector.connect(host="localhost",user="root",passwd="root",db="smpp")
         mycursor = database.cursor()
+        res="True"
         sql="select timeStamp,msgSend, ackRecv from smppTrafficMonitor where status='0'"
-        mycursor.execute(sql)
+        try:
+            mycursor.execute(sql)
+        except:
+            res="False"
         res=mycursor.fetchall()
         my_lsit=[]
         
-        print("list====",type(res))
-        print(mycursor.rowcount)
+        #print("list====",type(res))
+        #print(mycursor.rowcount)
         for s in res:
             #print(s[0])
             #print(s[1])
@@ -91,7 +104,7 @@ class serviceClass:
 
                 }
             my_lsit.append(di)
-        print(my_lsit)
+        #print(my_lsit)
         return my_lsit
 
     def completedJob(self):
